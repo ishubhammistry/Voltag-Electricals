@@ -1,35 +1,43 @@
-import Link from "next/link";
-// ✅ 1. Import the Home icon
-import { ChevronRight, Home } from "lucide-react";
+// src/components/Breadcrumbs.tsx
 
-// Define the type for a single breadcrumb item
+import Link from 'next/link';
+import { ChevronRight, Home } from 'lucide-react';
+
 type BreadcrumbItem = {
   label: string;
   href: string;
 };
 
-// Define the props for the Breadcrumbs component
 interface BreadcrumbsProps {
   items: BreadcrumbItem[];
 }
 
 export default function Breadcrumbs({ items }: BreadcrumbsProps) {
-  // Return null if there are no items to display
-  if (!items || items.length === 0) {
+  if (!items) {
     return null;
   }
 
   return (
     <nav aria-label="Breadcrumb">
       <ol className="flex items-center gap-1.5 break-words sm:gap-2.5 flex-wrap">
+        {/* ✅ 1. Always add the Home icon link as the first item */}
+        <li>
+          <Link
+            href="/"
+            className="text-slate-500 hover:text-primary transition-colors"
+          >
+            <Home className="w-4 h-4" />
+            <span className="sr-only">Home</span> {/* For screen readers */}
+          </Link>
+        </li>
+
+        {/* ✅ 2. Map over the rest of the items */}
         {items.map((item, index) => (
           <li key={item.href} className="flex items-center gap-1.5 sm:gap-2.5">
-            {/* Don't show a separator before the first item */}
-            {index > 0 && (
-              <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
-            )}
-
-            {/* The last item is the current page, so it's not a link */}
+            {/* Always show a separator now */}
+            <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
+            
+            {/* Logic for last item vs. a regular link remains the same */}
             {index === items.length - 1 ? (
               <span
                 className="text-sm font-semibold text-slate-800"
@@ -42,15 +50,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
                 href={item.href}
                 className="text-sm font-medium text-slate-500 hover:text-primary transition-colors"
               >
-                {/* ✅ 2. Conditionally add the Home icon for the first item */}
-                {index === 0 ? (
-                  <span className="flex items-center gap-1.5">
-                    <Home className="w-4 h-4" />
-                    {item.label}
-                  </span>
-                ) : (
-                  item.label
-                )}
+                {item.label}
               </Link>
             )}
           </li>

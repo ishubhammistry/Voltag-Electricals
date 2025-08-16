@@ -394,7 +394,7 @@ export default function StoreClient({
                               size="sm"
                               className="w-full rounded-xl"
                             >
-                              <Info className="h-4 w-4 mr-2" /> View Product
+                              View Product
                             </Button>
                           </Link>
                         ) : (

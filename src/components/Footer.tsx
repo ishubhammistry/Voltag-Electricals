@@ -204,7 +204,7 @@ const Footer = ({ logoUrl }: { logoUrl: string }) => {
                 Terms of Service
               </Link>
               <Link
-                href="/sitemap"
+                href="/sitemap.xml"
                 className="hover:text-primary transition-colors duration-300"
               >
                 Sitemap

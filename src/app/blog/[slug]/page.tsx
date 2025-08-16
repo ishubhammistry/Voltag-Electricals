@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { client, urlFor } from "@/lib/sanity";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
 import { format } from "date-fns";
+import { Metadata } from 'next';
 
 // --- START: Next.js 15 Update ---
 // The type for page props has changed. `params` is now a Promise.

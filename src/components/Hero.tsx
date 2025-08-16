@@ -5,7 +5,7 @@ import Link from 'next/link'; // Import the Link component
 import { Button } from '@/components/ui/button';
 import { ArrowDown, Zap, Cpu, Workflow, LayoutGrid } from 'lucide-react'; // Add LayoutGrid icon
 import CircuitAnimation from './CircuitAnimation';
-
+const floatingElementsCount = 5;
 const Hero = () => {
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/10 via-white to-primary/5 pt-24 sm:pt-20">
@@ -15,7 +15,7 @@ const Hero = () => {
       
       {/* Floating Elements */}
       <div className="absolute inset-0 pointer-events-none">
-        {[...Array(15)].map((_, i) => (
+        {[...Array(floatingElementsCount)].map((_, i) => (
           <div
             key={i}
             className="absolute w-1 h-1 bg-primary/30 rounded-full animate-float"

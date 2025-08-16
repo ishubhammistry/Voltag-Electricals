@@ -4,9 +4,35 @@ import { Metadata } from 'next';
 import { CheckCircle } from 'lucide-react';
 
 // SEO Metadata for the About page
+// src/app/about/page.tsx
+
 export const metadata: Metadata = {
-  title: 'About Voltag Electricals',
-  description: 'Learn about Voltag Electricals, the best electrical store in Vadodara since 2017. We are a leading provider of industrial and commercial electrical and electronic controls, automation and motion products.',
+  title: "About Voltag Electricals | Your Trusted Partner in Vadodara",
+  description: "Since 2017, Voltag Electricals has been a leading electrical store in Vadodara, specializing in industrial automation, controls, and high-quality electronic components.",
+  // ✅ Add a canonical URL
+  alternates: {
+    canonical: 'https://veproducts.in/about',
+  },
+  // ✅ Add Open Graph tags for social sharing
+  openGraph: {
+    title: 'About Voltag Electricals',
+    description: 'Discover our story, mission, and why we are the trusted choice for electrical supplies in Vadodara.',
+    url: 'https://veproducts.in/about',
+    images: [
+      {
+        url: 'https://cdn.sanity.io/images/4sgsuyry/production/1b59bd450c1f469d95a2d57d96500cac1aabb1fe-1277x1920.jpg', // Use an image from the page
+        width: 1277,
+        height: 1920,
+      },
+    ],
+    type: 'website',
+  },
+  // ✅ Add Twitter-specific tags
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Voltag Electricals | Your Trusted Partner in Vadodara',
+    description: 'Since 2017, Voltag Electricals has been a leading electrical store in Vadodara.',
+  },
 };
 
 const AboutPage = () => {
@@ -22,23 +48,19 @@ const AboutPage = () => {
   ];
 
   return (
-    // RESPONSIVE ADJUSTMENT: Reduced top padding on mobile
-    <div className="pt-20 lg:pt-24 bg-white">
-      <section className="py-12 sm:py-16 lg:py-24">
+    <div className="pt-24 bg-white">
+      <section className="py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* RESPONSIVE ADJUSTMENT: Added a larger vertical gap on mobile */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-16 gap-x-12 lg:gap-x-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             
-            {/* Left Column: Content */}
-            <div className="lg:order-1"> {/* Ensures this column comes first on large screens */}
+            <div>
               <p className="text-sm font-semibold text-primary uppercase mb-2">
                 About Us
               </p>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-space-grotesk text-slate-900 mb-6">
                 We Are Best Electrical Store in Vadodara Since 2017
               </h1>
-              {/* RESPONSIVE ADJUSTMENT: Smaller text on mobile for better readability */}
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed mb-8">
+              <p className="text-lg text-slate-600 leading-relaxed mb-8">
                 Voltag Electricals, A Privately Held Company Shop in Vadodara, Gujarat India, is a leading provider of industrial and commercial electrical and electronic controls, automation and motion products.
               </p>
               
@@ -52,19 +74,17 @@ const AboutPage = () => {
               </ul>
             </div>
 
-            {/* Right Column: Image Collage */}
-            {/* RESPONSIVE ADJUSTMENT: Added margin for the overlapping image on mobile */}
-            <div className="relative h-[300px] sm:h-[450px] lg:h-full mb-10 lg:mb-0 lg:order-2">
+            <div className="relative h-[300px] sm:h-[450px] lg:h-full">
               <Image
-                src="https://cdn.sanity.io/images/4sgsuyry/production/1b59bd450c1f469d95a2d57d96500cac1aabb1fe-1277x1920.jpg"
+                src="https://cdn.sanity.io/images/4sgsuyry/production/1b59bd450c1f469d95a2d57d96500cac1aabb1fe-1277x1920.jpg" // Replace with your actual image URL
                 alt="Interior of an electrical panel with complex wiring"
                 fill
                 className="object-cover rounded-lg shadow-lg"
               />
-              {/* RESPONSIVE ADJUSTMENT: Overlapping image is smaller and positioned less aggressively on mobile */}
-              <div className="absolute -bottom-6 -right-6 w-1/2 h-1/2 sm:-bottom-8 sm:-right-8 sm:w-2/3 sm:h-2/3">
+              {/* Overlapping Image (Foreground) */}
+              <div className="absolute -bottom-8 -right-8 w-2/3 h-2/3">
                  <Image
-                    src="https://cdn.sanity.io/images/4sgsuyry/production/25b2cdd251995dc8b3ea103769167d6286fe375f-1920x1407.jpg"
+                    src="https://cdn.sanity.io/images/4sgsuyry/production/25b2cdd251995dc8b3ea103769167d6286fe375f-1920x1407.jpg" // Replace with your actual image URL
                     alt="Close-up of electrical circuit breakers"
                     fill
                     className="object-cover rounded-lg shadow-2xl border-4 border-white"

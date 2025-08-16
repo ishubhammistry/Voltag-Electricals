@@ -2,53 +2,80 @@
 
 import { client } from "@/lib/sanity";
 import StoreClient from "./StoreClient";
-// ✅ FIX: Use the correct type names as defined in src/types/index.ts
 import { Category, Product } from "@/types";
+import { Metadata } from "next";
 
-/**
- * GROQ query to fetch all products.
- * It uses projections to expand referenced documents (brand, category)
- * into the final result, ensuring the data shape matches the 'Product' type.
- */
+export const metadata: Metadata = {
+  title: "Electrical Products Store | Voltag Electricals",
+  description:
+    "Browse and search our complete catalog of industrial automation parts, electrical controls, and supplies from top brands. Advanced filtering available.",
+  alternates: {
+    canonical: "https://veproducts.in/store",
+  },
+  openGraph: {
+    title: "Complete Product Store | Voltag Electricals",
+    description:
+      "Find all your electrical and automation needs in our comprehensive store.",
+    url: "https://veproducts.in/store",
+    images: ["/og-image.png"],
+  },
+};
+
 const productsQuery = `*[_type == "product"]{
-  ..., // Fetches all native fields from the product
-  slug, // Gets the product's own slug
-  "brand": brand->{name}, // Gets the brand's name
-  
-  // This block gets the parent slugs needed to build the URL
+  ..., 
+  slug, 
+  "brand": brand->{name},
   "productLine": productLine->{
-    slug, // Gets the parent product line's slug
+    slug,
     "category": category->{
-      name, // Gets the category name (you still need this for filtering)
-      slug  // Gets the grandparent category's slug
+      name,
+      slug
     }
   }
 }`;
 
-/**
- * GROQ query to fetch all categories, ordered alphabetically.
- */
 const categoriesQuery = `*[_type == "category"] | order(name asc)`;
 
-/**
- * The main server component for the store page.
- * It fetches all necessary data on the server and passes it down
- * to the interactive client component.
- */
 export default async function StorePage() {
-  // Fetch products and categories from Sanity in parallel for performance.
   const [products, categories] = await Promise.all([
-    // ✅ FIX: Use the correct generic type 'Product[]'
-    client.fetch<Product[]>(productsQuery),
-    // ✅ FIX: Use the correct generic type 'Category[]'
-    client.fetch<Category[]>(categoriesQuery),
+    client.fetch<Product[]>(productsQuery, {}, { next: { revalidate: 3600 } }),
+    client.fetch<Category[]>(categoriesQuery, {}, { next: { revalidate: 3600 } }),
   ]);
 
-  // Render the client component with the fetched data as initial props.
+  // ✅ FIX: Filter products to ensure they have the necessary data for a URL
+  const validProductsForSchema = products.filter(
+    (product) => product.productLine?.category?.slug && product.slug
+  );
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Electrical Products Store',
+    description: 'Browse and search all products from Voltag Electricals.',
+    url: 'https://veproducts.in/store',
+    mainEntity: {
+      '@type': 'ItemList',
+      // Use the new, filtered array here
+      itemListElement: validProductsForSchema.slice(0, 5).map((product, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'Product',
+          // This is now safe and will not produce an error
+          url: `https://veproducts.in/categories/${product.productLine!.category.slug.current}/${product.productLine!.slug.current}/${product.slug!.current}`,
+          name: product.name,
+        },
+      })),
+    },
+  };
+
   return (
-    <StoreClient
-      initialProducts={products}
-      initialCategories={categories}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <StoreClient initialProducts={products} initialCategories={categories} />
+    </>
   );
 }

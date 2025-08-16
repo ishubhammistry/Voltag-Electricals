@@ -25,7 +25,8 @@ export const metadata: Metadata = {
     default: "Voltag Electricals | Industrial Automation & Electrical Supplies",
     template: "%s | Voltag Electricals",
   },
-  description: "Your trusted partner in Vadodara for industrial automation, electrical controls, and high-quality electrical supplies from top brands.",
+  description:
+    "Your trusted partner in Vadodara for industrial automation, electrical controls, and high-quality electrical supplies from top brands.",
   openGraph: {
     title: "Voltag Electricals",
     description: "Industrial automation solutions and electrical supplies.",
@@ -33,19 +34,19 @@ export const metadata: Metadata = {
     siteName: "Voltag Electricals",
     images: [
       {
-        url: 'https://veproducts.in/og-image.png', // A default social sharing image
+        url: "https://veproducts.in/og-image.png", // A default social sharing image
         width: 1200,
         height: 630,
       },
     ],
-    locale: 'en_US',
-    type: 'website',
+    locale: "en_US",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: "Voltag Electricals",
     description: "Industrial automation solutions and electrical supplies.",
-    images: ['https://veproducts.in/og-image.png'],
+    images: ["https://veproducts.in/og-image.png"],
   },
   robots: {
     index: true,
@@ -67,12 +68,40 @@ export default async function RootLayout({
 }) {
   // 5. Fetch the logo data on the server
   const settings = await client.fetch(settingsQuery);
-  const logoLightUrl = settings?.logoLight ? urlFor(settings.logoLight).url() : '';
-  const logoDarkUrl = settings?.logoDark ? urlFor(settings.logoDark).url() : '';
+  const logoLightUrl = settings?.logoLight
+    ? urlFor(settings.logoLight).url()
+    : "";
+  const logoDarkUrl = settings?.logoDark ? urlFor(settings.logoDark).url() : "";
 
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Voltag Electricals",
+    url: "https://veproducts.in",
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+91-74900-98328", // Add your business phone number
+      contactType: "Customer Service",
+    },
+    address: {
+      "@type": "PostalAddress",
+      streetAddress:
+        "Shop No. 9, Near Chhani Bus Stand, Vadodara, Gujarat, India - 391740",
+      addressLocality: "Vadodara",
+      addressRegion: "GJ",
+      postalCode: "391740", // Your area's postal code
+      addressCountry: "IN",
+    },
+  };
   return (
     <html lang="en">
       <body className={`${inter.variable} ${spaceGrotesk.variable}`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
         <Providers>
           {/* 6. Pass the fetched URLs as props to your components */}
           <Navbar logoUrl={logoLightUrl} />

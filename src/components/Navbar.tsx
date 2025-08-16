@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, Phone, Menu, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Phone, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = ({ logoUrl }: { logoUrl: string }) => {
@@ -51,7 +50,8 @@ const Navbar = ({ logoUrl }: { logoUrl: string }) => {
             </Link>
           </div>
 
-          <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
+          {/* CHANGED: Navigation now appears on medium screens (md) */}
+          <div className="hidden md:flex items-center space-x-6 xl:space-x-8">
             {navItems.map((item) => (
               <a
                 key={item.name}
@@ -69,7 +69,8 @@ const Navbar = ({ logoUrl }: { logoUrl: string }) => {
               <div className="p-1.5 lg:p-2 bg-primary/10 rounded-full">
                 <Phone className="h-4 w-4 lg:h-5 lg:w-5 text-primary" />
               </div>
-              <div className="hidden lg:block">
+              {/* CHANGED: Phone text now appears on medium screens (md) */}
+              <div className="hidden md:block">
                 <div className="text-xs xl:text-sm font-semibold">
                   +91 74900 98328
                 </div>
@@ -77,10 +78,11 @@ const Navbar = ({ logoUrl }: { logoUrl: string }) => {
               </div>
             </div>
 
+            {/* CHANGED: Hamburger menu now hidden on medium screens (md) */}
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden h-10 w-10 sm:h-12 sm:w-12"
+              className="md:hidden h-10 w-10 sm:h-12 sm:w-12"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? (
@@ -92,17 +94,12 @@ const Navbar = ({ logoUrl }: { logoUrl: string }) => {
           </div>
         </div>
 
+        {/* --- Mobile Menu --- */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl shadow-lg border-t border-slate-200">
+          // CHANGED: Mobile menu is now hidden on medium screens (md)
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl shadow-lg border-t border-slate-200">
             <div className="px-4 py-4 sm:py-6 space-y-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4 sm:h-5 sm:w-5" />
-                <Input
-                  type="text"
-                  placeholder="Search products..."
-                  className="pl-9 sm:pl-10 pr-4 py-2 sm:py-3 w-full border-slate-300 focus:border-primary focus:ring-primary rounded-xl text-sm sm:text-base"
-                />
-              </div>
+              {/* REMOVED: Search input field was here */}
               <nav className="space-y-2 sm:space-y-3">
                 {navItems.map((item) => (
                   <a

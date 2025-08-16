@@ -1,16 +1,21 @@
-// app/pricelist/page.tsx
 import { Metadata } from "next";
 import { client } from "@/lib/sanity";
-import BrochureGrid from "./BrochureGrid"; // ✅ 1. Import your new client component
+import BrochureGrid from "./BrochureGrid"; 
 
-// SEO Metadata remains the same
 export const metadata: Metadata = {
   title: "Product Catalogues & Pricelists | Voltag Electricals",
   description: "Download the latest official pricelists and product catalogues from leading brands in the electrical industry. All resources are up-to-date.",
+  alternates: {
+    canonical: "https://veproducts.in/pricelist",
+  },
+  openGraph: {
+    title: "Product Catalogues & Pricelists | Voltag Electricals",
+    description: "Access and download the latest official pricelists from our trusted partners.",
+    url: "https://veproducts.in/pricelist",
+    images: ["/og-image.png"], 
+  },
 };
 
-// --- Type Definitions ---
-// Note: These types are now also in BrochureGrid.tsx, consider moving them to a central types file later.
 interface SanityImage {
   asset: { _ref: string; _type: 'reference'; };
 }
@@ -23,7 +28,6 @@ interface Brochure {
   fileSize: number;
 }
 
-// --- Data Fetching ---
 const brochuresQuery = `*[_type == "brochure"] | order(companyName asc){
   _id,
   companyName,
@@ -32,11 +36,10 @@ const brochuresQuery = `*[_type == "brochure"] | order(companyName asc){
   "fileSize": brochureFile.asset->size
 }`;
 
-// --- Page Component (Server Component) ---
 export default async function PricelistPage() {
-  const brochures: Brochure[] = await client.fetch(brochuresQuery);
-
-  // JSON-LD Structured Data remains the same
+  const brochures: Brochure[] = await client.fetch(brochuresQuery, {}, {
+    next: { revalidate: 3600 } // Re-fetches data at most once per hour
+  });
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",

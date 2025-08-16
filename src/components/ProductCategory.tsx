@@ -3,6 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button"; // Added import
+import { ShoppingBag } from "lucide-react"; // Added import
 import { urlFor } from "@/lib/sanity";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
@@ -47,10 +49,10 @@ export default function ProductCategory({ categories }: ProductCategoryProps) {
                 {category.image && (
                   <div className="relative w-full h-56">
                     <Image
-                      src={urlFor(category.image).url()} // Remove .width() and .height() when using fill
+                      src={urlFor(category.image).url()}
                       alt={`Image for ${category.name}`}
                       fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" // Helps Next.js optimize
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
@@ -64,6 +66,20 @@ export default function ProductCategory({ categories }: ProductCategoryProps) {
               </Card>
             </Link>
           ))}
+        </div>
+
+        {/* --- NEW: "View All Products" Button --- */}
+        <div className="mt-16 text-center">
+          <Button
+            asChild
+            size="lg"
+            className="bg-primary hover:bg-primary-dark text-white px-8 py-4 text-lg rounded-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 group"
+          >
+            <Link href="/categories">
+              <ShoppingBag className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
+              View All Categories
+            </Link>
+          </Button>
         </div>
       </div>
     </section>

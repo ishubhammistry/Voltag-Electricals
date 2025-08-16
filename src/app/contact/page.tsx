@@ -10,7 +10,7 @@ export default function ContactPage() {
   const emailAddress = "voltagelectricals@gmail.com";
 
   // Google Maps embed URL - replace with your actual business location
-  const mapSrc = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14767.234567890123!2d73.1932!3d22.2845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395fc5a555555555%3A0x8f2c04e4b8a48b3a!2sMakarpura%20GIDC%2C%20Vadodara%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1678886543210!5m2!1sen!2sin";
+  const mapSrc = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3689.768863120551!2d73.16187697952883!3d22.362354688173237!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395fc940f3790507%3A0xf8ebf9344b24d7d3!2sVoltag%20Electricals!5e0!3m2!1sen!2sin!4v1753619358375!5m2!1sen!2sin";
 
   return (
     <div className="bg-gradient-to-br from-primary/5 via-white to-primary/10">

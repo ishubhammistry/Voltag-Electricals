@@ -1,31 +1,51 @@
-// app/contact/ContactForm.tsx
+// src/components/ContactForm.tsx
+
 "use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, CheckCircle } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function ContactForm() {
-  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setStatus("submitting");
-    setMessage("");
+    setIsSubmitting(true);
+    
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData.entries());
 
-    // Simulate a network request
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      // This sends the data to your API route from Step 1
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-    // In a real application, you would send the form data to a server endpoint here.
-    // For now, we'll just simulate a success response.
-    setStatus("success");
-    setMessage("Thank you! Your message has been sent successfully.");
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
 
-    // To reset the form after success:
-    // (event.target as HTMLFormElement).reset();
+      toast.success("Message Sent!", {
+        description: "Thank you! We've received your message.",
+      });
+      (event.target as HTMLFormElement).reset();
+
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast.error("Submission Failed", {
+        description: "Something went wrong. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -50,19 +70,18 @@ export default function ContactForm() {
         <Button
           type="submit"
           className="w-full bg-primary hover:bg-primary-dark text-white text-lg py-3 rounded-xl transition-all duration-300"
-          disabled={status === "submitting"}
+          disabled={isSubmitting}
         >
-          {status === "submitting" && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
-          {status === "success" ? "Message Sent!" : "Send Message"}
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              <span>Sending...</span>
+            </>
+          ) : (
+            "Send Message"
+          )}
         </Button>
       </div>
-      {status === "success" && (
-        <div className="flex items-center text-green-600">
-          <CheckCircle className="w-5 h-5 mr-2" />
-          <p>{message}</p>
-        </div>
-      )}
-      {status === "error" && <p className="text-red-600">{message}</p>}
     </form>
   );
 }

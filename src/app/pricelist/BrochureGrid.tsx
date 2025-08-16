@@ -21,7 +21,7 @@ interface Brochure {
 
 // --- Helper Functions ---
 function formatBytes(bytes: number, decimals = 2) {
-  if (bytes === 0) return "0 Bytes";
+  if (!bytes || bytes === 0) return "0 Bytes";
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
   const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
@@ -35,7 +35,6 @@ export default function BrochureGrid({ brochures }: { brochures: Brochure[] }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
          {brochures.map((brochure) => (
-            // ✅ FIX: Removed the inline style prop to prevent the animation delay
             <Card
               key={brochure._id}
               className="group hover:shadow-2xl transition-all duration-300 border-slate-200/60 shadow-lg overflow-hidden flex flex-col bg-white rounded-2xl p-6 hover:-translate-y-2"
@@ -57,6 +56,8 @@ export default function BrochureGrid({ brochures }: { brochures: Brochure[] }) {
                     src={urlFor(brochure.companyLogo).url()}
                     alt={`${brochure.companyName} logo`}
                     fill
+                    // ✅ Perf: Added sizes attribute for responsive image loading
+                    sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
                     className="object-contain"
                   />
                 </div>
@@ -68,6 +69,7 @@ export default function BrochureGrid({ brochures }: { brochures: Brochure[] }) {
                     href={brochure.fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`View ${brochure.companyName} catalogue online`}
                   >
                     <Eye className="w-4 h-4 mr-2" />
                     View Online
@@ -80,6 +82,7 @@ export default function BrochureGrid({ brochures }: { brochures: Brochure[] }) {
                   <a
                     href={`/api/download?fileUrl=${encodeURIComponent(brochure.fileUrl)}`}
                     download
+                    aria-label={`Download ${brochure.companyName} catalogue`}
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Download Catalogue
@@ -90,7 +93,6 @@ export default function BrochureGrid({ brochures }: { brochures: Brochure[] }) {
           ))}
         </div>
       </div>
-      {/* ✅ FIX: Removed the <style jsx global> block */}
     </section>
   );
 }
